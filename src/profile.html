@@ -1,26 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Profile</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    </head>
 
-    <body>
-        <div id="nav-placeholder"></div>
-        <script>
-            $(function(){
-                $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr){
-                    if(statusTxt == "success")
-                        $("#nav-profile").addClass("active");
-                });
+<head>
+    <title>Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link type="text/css" rel="stylesheet" href="./css/profile.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        // Placeholders, once backend is implemented, set these values to fetched values
+        const name = "John Doe";
+        const email = "johndoe@ufl.edu";
+        const profilePicture = "../img/profile_picture.png";
+        const games = ['Alabama', 'Georgia', 'Tennessee', 'Auburn', 'LSU', 'Kentucky', 'Mississippi', 'Mississippi State', 'Vanderbilt'];
+
+        $(document).ready(function () {
+            $("#name").html(name)
+            $("#email").html(email)
+            $("#profile_picture").attr("src", profilePicture);
+
+            for (let i = 0; i < 10; i++) {
+                var listing = $("#listing").clone();
+
+                //Temporarily generating random values as placeholders, once backend is implemented, replace random values with fetched values.
+                listing.children('h3').eq(0).html(games[Math.floor(Math.random() * games.length)]); //game
+                listing.children('span').eq(0).html(Math.floor(Math.random() * 10) + 1); //section
+                listing.children('span').eq(1).html(Math.floor(Math.random() * 20) + 1); //row
+                listing.children('span').eq(2).html(Math.floor(Math.random() * 15) + 1); //seat
+                listing.children('span').eq(3).html("$" + (Math.floor(Math.random() * 150) + 1)); //price
+                listing.attr('id', 'listing' + (i + 1)).appendTo("#listings");
+            }
+            $("#listing").remove();
+        });
+    </script>
+</head>
+
+<body class="bg-light">
+    <div id="nav-placeholder"></div>
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html #navbar", function (responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success")
+                    $("#nav-profile").addClass("active");
             });
-        </script>
-    </body>
+        });
+    </script>
+    <div id="main" class="container">
+        <div class="row ml-3">
+            <h2>Profile</h2>
+        </div>
+        <div class="row align-items-center ml-3">
+            <div class="col-md-3">
+                <img id="profile_picture" src="../img/profile_picture.png">
+            </div>
+            <div class="col-md-4">
+                <label>Name:</label> <span id="name"></span><br>
+                <label>Email:</label> <span id="email"></span><br>
+            </div>
+        </div>
+        <div class="row mt-5"></div>
+        <div class="row ml-3">
+            <h2>Your Listings:</h2>
+        </div>
+        <div id="listings" class="row ml-3 justify-content-center">
+            <div id="listing" class="col-lg-3 rounded-xl mr-4 mt-4 p-4 bg-cream">
+                <h3 id="game">Game</h3><br><br>
+                <b>Section: </b><span id="section"></span><br>
+                <b>Row: </b><span id="row"></span><br>
+                <b>Seat: </b><span id="seat"></span><br><br>
+                <b>Price: </b><span id="price"></span><br><br>
+                <div class="d-flex justify-content-center">
+                    <input type="button" class="btn btn-primary mr-1" value="Edit">
+                    <input type="button" class="btn btn-primary ml-1" value="Mark Sold">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
