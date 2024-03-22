@@ -19,23 +19,35 @@
         const profilePicture = "../img/profile_picture.png";
         const games = ['Alabama', 'Georgia', 'Tennessee', 'Auburn', 'LSU', 'Kentucky', 'Mississippi', 'Mississippi State', 'Vanderbilt'];
 
+        function newListing(number, game, section, row, seat, price) {
+            let listing = `<div id="listing-${number}" class="col-lg-3 rounded-xl mr-4 mt-4 p-4 bg-cream">
+                                <h3 id="game">${game}</h3><br><br>
+                                <b>Section: </b><span id="section">${section}</span><br>
+                                <b>Row: </b><span id="row">${row}</span><br>
+                                <b>Seat: </b><span id="seat">${seat}</span><br><br>
+                                <b>Price: </b><span id="price">${price}</span><br><br>
+                                <div class="d-flex justify-content-center">
+                                    <input type="button" class="btn btn-primary mr-1" value="Edit">
+                                    <input type="button" class="btn btn-primary ml-1" value="Mark Sold">
+                                </div>
+                            </div>`;
+            $("#listings").append(listing);
+        }
         $(document).ready(function () {
             $("#name").html(name)
             $("#email").html(email)
             $("#profile_picture").attr("src", profilePicture);
 
             for (let i = 0; i < 10; i++) {
-                var listing = $("#listing").clone();
-
                 //Temporarily generating random values as placeholders, once backend is implemented, replace random values with fetched values.
-                listing.children('h3').eq(0).html(games[Math.floor(Math.random() * games.length)]); //game
-                listing.children('span').eq(0).html(Math.floor(Math.random() * 10) + 1); //section
-                listing.children('span').eq(1).html(Math.floor(Math.random() * 20) + 1); //row
-                listing.children('span').eq(2).html(Math.floor(Math.random() * 15) + 1); //seat
-                listing.children('span').eq(3).html("$" + (Math.floor(Math.random() * 150) + 1)); //price
-                listing.attr('id', 'listing' + (i + 1)).appendTo("#listings");
+                let game = games[Math.floor(Math.random() * games.length)];
+                let section = Math.floor(Math.random() * 10) + 1;
+                let row = Math.floor(Math.random() * 20) + 1;
+                let seat = Math.floor(Math.random() * 15) + 1;
+                let price = "$" + (Math.floor(Math.random() * 150) + 1);
+
+                newListing(i + 1, game, section, row, seat, price);
             }
-            $("#listing").remove();
         });
     </script>
 </head>
@@ -68,17 +80,7 @@
             <h2>Your Listings:</h2>
         </div>
         <div id="listings" class="row ml-3 justify-content-center">
-            <div id="listing" class="col-lg-3 rounded-xl mr-4 mt-4 p-4 bg-cream">
-                <h3 id="game">Game</h3><br><br>
-                <b>Section: </b><span id="section"></span><br>
-                <b>Row: </b><span id="row"></span><br>
-                <b>Seat: </b><span id="seat"></span><br><br>
-                <b>Price: </b><span id="price"></span><br><br>
-                <div class="d-flex justify-content-center">
-                    <input type="button" class="btn btn-primary mr-1" value="Edit">
-                    <input type="button" class="btn btn-primary ml-1" value="Mark Sold">
-                </div>
-            </div>
+            <!-- Listings get added here programmatically -->
         </div>
     </div>
 </body>
