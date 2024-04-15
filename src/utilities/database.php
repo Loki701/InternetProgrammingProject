@@ -23,14 +23,50 @@ function getAllUsers($connection)
 
 function getAllEvents($connection)
 {
-    $query = "SELECT * FROM Event";
+    $query = "SELECT * FROM Event ORDER BY EventDate ASC";
     $result = mysqli_query($connection, $query);
     return $result;
+}
+
+function getEvent($connection, $eventID)
+{
+    $query = "SELECT * FROM Event WHERE EventID = '$eventID'";
+    $result = mysqli_query($connection, $query);
+    $event = mysqli_fetch_assoc($result);
+    return $event;
 }
 
 function getAllListings($connection)
 {
     $query = "SELECT * FROM Listing";
+    $result = mysqli_query($connection, $query);
+    return $result;
+}
+
+function replaceOrderString($order)
+{
+    if ($order == "price") {
+        $order = "ListingPrice";
+    } else if ($order == "row") {
+        $order = "ListingRow";
+    } else {
+        $order = "ListingPrice";
+    }
+    return $order;
+}
+
+function getListingsByEvent($connection, $eventID, $order)
+{
+    $order = replaceOrderString($order);
+    $query = "SELECT * FROM Listing WHERE EventID = '$eventID' ORDER BY $order ASC";
+    $result = mysqli_query($connection, $query);
+    return $result;
+}
+
+function getListingsByEventSection($connection, $eventID, $section, $order)
+{
+    $order = replaceOrderString($order);
+    $query = "SELECT * FROM Listing WHERE EventID = '$eventID' AND ListingSection = '$section' ORDER BY $order ASC";
     $result = mysqli_query($connection, $query);
     return $result;
 }
