@@ -16,7 +16,7 @@
 
 
     <?php
-    require_once ("utilities/database.php");
+    require_once ("config/database.php");
     // Sample Listing: [ListingID] => 1 [UserID] => dev [EventID] => 1 [ListingPrice] => 20.00 [ListingSection] => 42 [ListingRow] => 10 [ListingSeat] => 3 [ListingNegotiable] => 1
     // Sample Event: [EventID] => 1 [EventName] => Gator Football [EventDate] => 2022-09-03 [EventImageFile] => alabama
     // Sample User: [UserID] => dev [UserPassword] => pass

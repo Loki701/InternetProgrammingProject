@@ -104,8 +104,6 @@
             // Client-side password hashing (use a strong hashing library)
             var hashedPassword = hashFunction(password);
 
-
-
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://localhost:3001/login', true); // Use HTTPS
             xhr.setRequestHeader('Content-Type', 'application/json');
