@@ -71,9 +71,9 @@ function getListingsByEventSection($connection, $eventID, $section, $order)
     return $result;
 }
 
-function addUser($connection, $userID, $userPassword)
+function addUser($connection, $userID, $userPasswordHash, $userFirstName, $userLastName)
 {
-    $query = "INSERT INTO User (UserID, UserPassword) VALUES ('$userID', '$userPassword')";
+    $query = "INSERT INTO User (UserID, UserPasswordHash, UserFirstName, UserLastName) VALUES ('$userID', '$userPasswordHash', '$userFirstName', '$userLastName')";
     $result = mysqli_query($connection, $query);
     return $result;
 }
