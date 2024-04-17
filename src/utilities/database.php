@@ -21,6 +21,34 @@ function getAllUsers($connection)
     return $result;
 }
 
+function doesUserExist($connection, $userID)
+{
+    $query = "SELECT * FROM User WHERE UserID = '$userID'";
+    $result = mysqli_query($connection, $query);
+
+    if ($result->num_rows > 0) {
+        return true;
+    }
+    return false;
+}
+
+function verifyUserPassword($connection, $userID, $password)
+{
+    $query = "SELECT * FROM User WHERE UserID = '$userID'";
+    $result = mysqli_query($connection, $query);
+    $user = mysqli_fetch_assoc($result);
+    if (password_verify($password, $user['UserPasswordHash'])) {
+        return true;
+    }
+    return false;
+}
+
+function updateUserToken($connection, $userID, $token)
+{
+    $query = "UPDATE User SET UserSessionToken='$token' WHERE UserID='$userID'";
+    $result = mysqli_query($connection, $query);
+}
+
 function getAllEvents($connection)
 {
     $query = "SELECT * FROM Event ORDER BY EventDate ASC";
