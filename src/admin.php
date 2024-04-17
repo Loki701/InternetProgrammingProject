@@ -25,7 +25,7 @@
 
     if ($_POST['action']) {
         if ($_POST['action'] == 'addUser') {
-            addUser($connection, $_POST['userID'], $_POST['userPassword']);
+            addUser($connection, $_POST['userID'], $_POST['userPasswordHash'], $_POST['userFirstName'], $_POST['userLastName']);
         } else if ($_POST['action'] == 'addEvent') {
             addEvent($connection, $_POST['eventName'], $_POST['eventDate'], $_POST['eventImageFile']);
         } else if ($_POST['action'] == 'addListing') {
@@ -70,14 +70,18 @@
         echo "<table class='table table-striped'>";
         echo "<tr>";
         echo "<th>UserID</th>";
-        echo "<th>UserPassword</th>";
+        echo "<th>UserPasswordHash</th>";
+        echo "<th>UserFirstName</th>";
+        echo "<th>UserLastName</th>";
         echo "<th>Actions</th>";
         echo "</tr>";
 
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>";
             echo "<td>" . $row['UserID'] . "</td>";
-            echo "<td>" . $row['UserPassword'] . "</td>";
+            echo "<td>" . $row['UserPasswordHash'] . "</td>";
+            echo "<td>" . $row['UserFirstName'] . "</td>";
+            echo "<td>" . $row['UserLastName'] . "</td>";
             //echo "<td><a href='admin.php?action=deleteUser&userID=" . $row['UserID'] . "'>Delete</a></td>";
             echo "<td><form action='admin.php' method='post'><input type='hidden' name='action' value='deleteUser'><input type='hidden' name='userID' value='" . $row['UserID'] . "'><input class='btn btn-outline-secondary' type='submit' value='Delete'></form></td>";
             echo "</tr>";
@@ -90,8 +94,12 @@
             <input type="hidden" name="action" value="addUser">
             <label for="userID">ID:</label>
             <input type="text" id="userID" name="userID" required>
-            <label for="userPassword">Password (hash):</label>
-            <input type="text" id="userPassword" name="userPassword" required>
+            <label for="userPasswordHash">Password (hash):</label>
+            <input type="text" id="userPasswordHash" name="userPasswordHash" required>
+            <label for="userFirstName">First Name:</label>
+            <input type="text" id="userFirstName" name="userFirstName" required>
+            <label for="userLastName">Last Name:</label>
+            <input type="text" id="userLastName" name="userLastName" required>
 
             <input class="btn btn-outline-primary" type="submit" value="Submit">
         </form>
