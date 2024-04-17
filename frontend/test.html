@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+</head>
+<body>
+
+    <h1>Test Page</h1>
+
+    <button id="loginButton">Login</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#loginButton').click(function() {
+                console.log('Logging in...');
+                $.ajax({
+                    type: "POST",
+                    url: "/backend/routes/api.php",
+                    data: { action: "login", email: 'john@example.com', password: 'password' },
+                    success: function(data) {
+                        console.log('Login response:', data);
+                        alert('Login successful!');
+                    }
+                });
+                
+            });
+        });
+    </script>
+</body>
+</html>
