@@ -73,6 +73,7 @@
         echo "<th>UserPasswordHash</th>";
         echo "<th>UserFirstName</th>";
         echo "<th>UserLastName</th>";
+        echo "<th>Token</th>";
         echo "<th>Actions</th>";
         echo "</tr>";
 
@@ -82,6 +83,7 @@
             echo "<td>" . $row['UserPasswordHash'] . "</td>";
             echo "<td>" . $row['UserFirstName'] . "</td>";
             echo "<td>" . $row['UserLastName'] . "</td>";
+            echo "<td>" . $row["UserSessionToken"] . "</td>";
             //echo "<td><a href='admin.php?action=deleteUser&userID=" . $row['UserID'] . "'>Delete</a></td>";
             echo "<td><form action='admin.php' method='post'><input type='hidden' name='action' value='deleteUser'><input type='hidden' name='userID' value='" . $row['UserID'] . "'><input class='btn btn-outline-secondary' type='submit' value='Delete'></form></td>";
             echo "</tr>";

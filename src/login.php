@@ -1,86 +1,70 @@
 #!/usr/local/bin/php
 
-<?php 
+<?php
 
-    include_once("database.php");
-    include_once("utility_functions.php");
-    session_start();
+require_once ("utilities/database.php");
+require_once ("utilities/utility_functions.php");
+session_start();
+$error_message = '';
 
-    //checks if the user is already logged in and redirects appropriately
-    if(check_login()){
-        header("Location: index.php");
-        die;
+//checks if the user is already logged in and redirects appropriately
+if (check_login()) {
+    header("Location: index.php");
+    die;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $validInput = true;
+    //something was posted
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Validate email using regex
+    $emailRegex = '/^[^\s@]+@ufl\\.edu/';
+    if (!preg_match($emailRegex, $email)) {
+        $error_message .= "! Email must end with '@ufl.edu'<br>";
+        $validInput = false;
     }
 
-	if($_SERVER['REQUEST_METHOD'] == "POST")
-	{
-		//something was posted
-		$email = $_POST['email'];
-		$password = $_POST['password'];
+    // Validate password using regex
+    $passwordRegex = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/';
+    if (!preg_match($passwordRegex, $password)) {
+        $error_message .= '! Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.<br>';
+        $validInput = false;
+    }
 
-        // Validate email using regex
-        $emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
-        if (!preg_match($emailRegex, $email)) {
-            echo 'Please enter a valid email address.';
-            return;
+    if ($validInput) {
+        $userID = str_replace('@ufl.edu', '', $email);
+
+        // Query the database to check if the user exists
+        $connection = connect();
+
+        if (doesUserExist($connection, $userID) && verifyUserPassword($connection, $userID, $password)) {
+            // Start session and set session token
+            $_SESSION['session_token'] = bin2hex(random_bytes(16));
+            $_SESSION['user_ID'] = $userID;
+
+            // save session token in database
+            updateUserToken($connection, $userID, $_SESSION['session_token']);
+
+            disconnect($connection);
+
+            // Redirect to home page
+            header("Location: index.php");
+            die;
+        } else {
+            disconnect($connection);
+            // Authentication failed
+            $error_message = "Wrong username or password!";
         }
-
-        // Validate password using regex
-        $passwordRegex = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/';
-        if (!preg_match($passwordRegex, $password)) {
-            echo 'Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.';
-            return;
-        }
-
-		if(!empty($email) && !empty($password)){
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-			 // Query the database to check if the user exists
-             $dbConnection = connect();
-         
-             // Use prepared statements to prevent SQL injection
-             $query = "SELECT * FROM users WHERE UserID=? AND UserPasswordHash=?";
-             $stmt = $dbConnection->prepare($query);
-             $stmt->bind_param("ss", $email, $hashedPassword);
-             $stmt->execute();
-             $result = $stmt->get_result();
-
-             if ($result->num_rows == 1) {
-                // User authenticated successfully
-                $user = $result->fetch_assoc();
-                // Start session and set session token
-
-                $_SESSION['session_token'] = bin2hex(random_bytes(16));
-                $_SESSION['user_email'] = $user['UserID'];
-                $_SESSION['user_first_name'] = $user['UserFirstName'];
-                $_SESSION['user_last_name'] = $user['UserLastName'];
-
-                // save session token in database
-                $query = "UPDATE users SET UserSessionToken=? WHERE UserID=?";
-                $stmt = $dbConnection->prepare($query);
-                $stmt->bind_param("ss", $_SESSION['session_token'], $user['UserID']);
-                $stmt->execute();
-
-                disconnect($dbConnection);
-
-                // Redirect to home page
-                header("Location: index.php");
-                die;
-            } else {
-                disconnect($dbConnection);
-                // Authentication failed
-                echo "wrong username or password!";
-            }
-		}else
-		{
-			echo "wrong username or password!";
-		}
-	}
+    }
+}
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -93,15 +77,16 @@
     <link type="text/css" rel="stylesheet" href="./css/login.css">
     <title>Log In</title>
 </head>
+
 <body>
     <div id="nav-placeholder"></div>
     <script>
-        $(function(){
-            $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr){
-                if(statusTxt == "success")
-                    $("#nav-profile").addClass("active");
-            });
+    $(function() {
+        $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success")
+                $("#nav-profile").addClass("active");
         });
+    });
     </script>
     <br><br>
 
@@ -116,50 +101,58 @@
                                     <div class="mb-5">
                                         <h3 class="h4 font-weight-bold text-theme">Login</h3>
                                     </div>
-    
+
                                     <h6 class="h5 mb-0">Welcome back!</h6>
-                                    <p class="text-muted mt-2 mb-5">Enter your email address and password to access your account.</p>
-    
+                                    <p class="text-muted mt-2 mb-5">Enter your email address and password to access your
+                                        account.</p>
+
                                     <form method='post'>
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Email address</label>
-                                            <input type="email" class="form-control" id="email" required>
+                                            <label for="email">Email address</label>
+                                            <input type="email" class="form-control" id="email" name="email" required>
                                         </div>
                                         <div class="form-group mb-5">
-                                            <label for="exampleInputPassword1">Password</label>
-                                            <input type="password" class="form-control" id="password" required>
+                                            <label for="password">Password</label>
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                required>
                                         </div>
+
+                                        <p style="color: red;"><?php echo $error_message; ?></p>
+
                                         <button type="submit" class="btn btn-theme">Login</button>
-                                        <a href="#l" class="forgot-link float-right text-primary">Forgot password?</a>
+                                        <!--<a href="#l" class="forgot-link float-right text-primary">Forgot password?</a>-->
                                     </form>
                                 </div>
                             </div>
-    
+
                             <div class="col-lg-6 d-none d-lg-inline-block">
                                 <div class="account-block rounded-right">
                                     <div class="overlay rounded-right"></div>
                                     <div class="account-testimonial">
                                         <h4 class="text-white mb-4">Saved so much money!</h4>
-                                        <p class="lead text-white">"Best account I have made for a long time. Can only recommend it for other students."</p>
+                                        <p class="lead text-white">"Best account I have made for a long time. Can only
+                                            recommend it for other students."</p>
                                         <p>- Jose Figueredo</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-    
+
                     </div>
                     <!-- end card-body -->
                 </div>
                 <!-- end card -->
-    
-                <p class="text-muted text-center mt-3 mb-4 mb-0">Don't have an account? <a href="./signup.html" class="text-primary ml-1">register</a></p>
-    
+
+                <p class="text-muted text-center mt-3 mb-4 mb-0">Don't have an account? <a href="./signup.php"
+                        class="text-primary ml-1">register</a></p>
+
                 <!-- end row -->
-    
+
             </div>
             <!-- end col -->
         </div>
         <!-- Row -->
     </div>
 </body>
+
 </html>

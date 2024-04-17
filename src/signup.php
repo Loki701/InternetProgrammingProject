@@ -1,57 +1,60 @@
+#!/usr/local/bin/php
 
 <?php
 
-    if($_SERVER['REQUEST_METHOD'] == "POST"){
-        $firstName = $_POST['firstname'];
-        $lastName = $_POST['lastname'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $passwordConfirmation = $_POST['passwordConfirmation'];
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $validInput = true;
+    $error_message = "";
 
-        // Validate email using regex
-        $emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
-        if (!preg_match($emailRegex, $email)) {
-            echo 'Please enter a valid email address.';
-            return;
-        }
+    $firstName = $_POST['firstname'];
+    $lastName = $_POST['lastname'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $passwordConfirmation = $_POST['passwordConfirmation'];
 
-        // Validate password using regex
-        $passwordRegex = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/';
-        if (!preg_match($passwordRegex, $password)) {
-            echo 'Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.';
-            return;
-        }
-
-        // Check if the password and confirmation match
-        if ($password !== $passwordConfirmation) {
-            echo 'Password and confirmation do not match.';
-            return;
-        }
-
-        // Check if users already exists
-        $query = "SELECT * FROM users WHERE UserID = ?";
-        $stmt = $dbConnection->prepare($query);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            echo 'User already exists.';
-            return;
-        }
-
-        //if not exists then add user
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        $query = "INSERT INTO users (UserID, UserFirstName, UserLastName, UserPasswordHash) VALUES (?, ?, ?, ?)";
-        $stmt = $dbConnection->prepare($query);
-        $stmt->bind_param("ssss", $email, $firstName, $lastName, $hashedPassword);
-        $stmt->execute();
-
-        // Redirect to login page
-        header("Location: login.php");
-        die;
+    // Validate email using regex
+    $emailRegex = '/^[^\s@]+@ufl\\.edu/';
+    if (!preg_match($emailRegex, $email)) {
+        $error_message .= "! Email must end with '@ufl.edu'<br>";
+        $validInput = false;
     }
+
+    // Validate password using regex
+    $passwordRegex = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/';
+    if (!preg_match($passwordRegex, $password)) {
+        $error_message .= '! Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.<br>';
+        $validInput = false;
+    }
+
+    // Check if the password and confirmation match
+    if ($password !== $passwordConfirmation) {
+        $error_message .= '! Password and confirmation do not match. <br>';
+        $validInput = false;
+    }
+
+    if ($validInput) {
+        $userID = str_replace('@ufl.edu', '', $email);
+        // Check if users already exists
+        require_once ("utilities/database.php");
+        $connection = connect();
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        echo $hashedPassword;
+
+        if (!doesUserExist($connection, $userID)) {
+            //if not exists then add user
+            //echo "addUser($connection, $userID, $hashedPassword, $firstName, $lastName);";
+            addUser($connection, $userID, $hashedPassword, $firstName, $lastName);
+
+            disconnect($connection);
+            // Redirect to login page
+            header("Location: login.php");
+            die;
+        } else {
+            $error_message = 'User already exists.';
+            disconnect($connection);
+        }
+    }
+}
 
 
 ?>
@@ -76,12 +79,12 @@
     <!-- Navbar-->
     <div id="nav-placeholder"></div>
     <script>
-        $(function () {
-            $("#nav-placeholder").load("nav.html #navbar", function (responseTxt, statusTxt, xhr) {
-                if (statusTxt == "success")
-                    $("#nav-profile").addClass("active");
-            });
+    $(function() {
+        $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success")
+                $("#nav-profile").addClass("active");
         });
+    });
     </script>
 
     <div class="container bg">
@@ -110,7 +113,8 @@
                                 </span>
                             </div>
                             <input id="firstName" type="text" name="firstname" placeholder="First Name"
-                                class="form-control bg-white border-left-0 border-md">
+                                class="form-control bg-white border-left-0 border-md"
+                                value=<?php echo $_POST['firstname'] ?>>
                         </div>
 
                         <!-- Last Name -->
@@ -121,7 +125,8 @@
                                 </span>
                             </div>
                             <input id="lastName" type="text" name="lastname" placeholder="Last Name"
-                                class="form-control bg-white border-left-0 border-md">
+                                class="form-control bg-white border-left-0 border-md"
+                                value=<?php echo $_POST['lastname'] ?>>
                         </div>
 
                         <!-- Email Address -->
@@ -132,7 +137,8 @@
                                 </span>
                             </div>
                             <input id="email" type="email" name="email" placeholder="Email Address"
-                                class="form-control bg-white border-left-0 border-md">
+                                class="form-control bg-white border-left-0 border-md"
+                                value=<?php echo $_POST['email'] ?>>
                         </div>
 
 
@@ -144,7 +150,8 @@
                                 </span>
                             </div>
                             <input id="password" type="password" name="password" placeholder="Password"
-                                class="form-control bg-white border-left-0 border-md">
+                                class="form-control bg-white border-left-0 border-md"
+                                value=<?php echo $_POST['password'] ?>>
                         </div>
 
                         <!-- Password Confirmation -->
@@ -154,9 +161,12 @@
                                     <i class="fas fa-lock text-muted"></i>
                                 </span>
                             </div>
-                            <input id="passwordConfirmation" type="text" name="passwordConfirmation"
-                                placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md">
+                            <input id="passwordConfirmation" type="password" name="passwordConfirmation"
+                                placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md"
+                                value=<?php echo $_POST['passwordConfirmation'] ?>>
                         </div>
+
+                        <p style="color: red;"><?php echo $error_message; ?></p>
 
                         <!-- Submit Button -->
                         <div class="form-group col-lg-12 mx-auto mb-0 ">
