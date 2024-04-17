@@ -1,3 +1,17 @@
+<?php
+    session_start();
+    if(!check_login()){
+        header("Location: login.php");
+        die;
+    }
+
+    // Can use session variables to get user data and display it
+    $firstName = $_SESSION['user_first_name'];
+    $lastName = $_SESSION['user_last_name'];
+    $email = $_SESSION['user_email'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

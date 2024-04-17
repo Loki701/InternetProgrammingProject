@@ -1,3 +1,61 @@
+
+<?php
+
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        $firstName = $_POST['firstname'];
+        $lastName = $_POST['lastname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $passwordConfirmation = $_POST['passwordConfirmation'];
+
+        // Validate email using regex
+        $emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
+        if (!preg_match($emailRegex, $email)) {
+            echo 'Please enter a valid email address.';
+            return;
+        }
+
+        // Validate password using regex
+        $passwordRegex = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/';
+        if (!preg_match($passwordRegex, $password)) {
+            echo 'Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.';
+            return;
+        }
+
+        // Check if the password and confirmation match
+        if ($password !== $passwordConfirmation) {
+            echo 'Password and confirmation do not match.';
+            return;
+        }
+
+        // Check if users already exists
+        $query = "SELECT * FROM users WHERE UserID = ?";
+        $stmt = $dbConnection->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            echo 'User already exists.';
+            return;
+        }
+
+        //if not exists then add user
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $query = "INSERT INTO users (UserID, UserFirstName, UserLastName, UserPasswordHash) VALUES (?, ?, ?, ?)";
+        $stmt = $dbConnection->prepare($query);
+        $stmt->bind_param("ssss", $email, $firstName, $lastName, $hashedPassword);
+        $stmt->execute();
+
+        // Redirect to login page
+        header("Location: login.php");
+        die;
+    }
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +98,7 @@
 
             <!-- Registeration Form -->
             <div class="col-md-7 col-lg-6 ml-auto">
-                <form action="#">
+                <form method='post'>
                     <div class="row">
 
                         <!-- First Name -->
@@ -102,9 +160,9 @@
 
                         <!-- Submit Button -->
                         <div class="form-group col-lg-12 mx-auto mb-0 ">
-                            <a href="#" class="btn btn-primary btn-block py-2 btn">
+                            <button type='submit' class="btn btn-primary btn-block py-2 btn">
                                 <span class="font-weight-bold">Create your account</span>
-                            </a>
+                            </button>
                         </div>
 
                     </div>
@@ -112,87 +170,10 @@
             </div>
         </div>
         <!-- Already Registered -->
-        <p class="text-muted text-center mt-3 mb-4 mb-0">Already Registered? <a href="./login.html"
+        <p class="text-muted text-center mt-3 mb-4 mb-0">Already Registered? <a href="./login.php"
                 class="text-primary ml-1">login</a></p>
 
     </div>
-    <script>
-        document.querySelector('.btn-primary').addEventListener('click', function (e) {
-            e.preventDefault();
-
-            var firstName = document.getElementById('firstName').value;
-            var lastName = document.getElementById('lastName').value;
-            var email = document.getElementById('email').value;
-            var countryCode = document.getElementById('countryCode').value;
-            var phoneNumber = document.getElementById('phoneNumber').value;
-            var job = document.getElementById('job').value;
-            var password = document.getElementById('password').value;
-            var passwordConfirmation = document.getElementById('passwordConfirmation').value;
-
-            // Validate email using regex
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-
-            // Validate password using regex
-            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-            if (!passwordRegex.test(password)) {
-                alert('Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.');
-                return;
-            }
-
-            // Check if the password and confirmation match
-            if (password !== passwordConfirmation) {
-                alert('Password and confirmation do not match.');
-                return;
-            }
-
-            // Client-side password hashing (use a strong hashing library)
-            var hashedPassword = hashFunction(password);
-
-            // Create user object
-            var user = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                countryCode: countryCode,
-                phoneNumber: phoneNumber,
-                job: job,
-                password: hashedPassword
-            };
-
-            // Send a POST request to the server
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://your-server-endpoint/add-user', true); // Replace with your server endpoint
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(user));
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.status === 'success') {
-                            alert('User registration successful!');
-                            window.location.href = 'https://localhost:3000/login';
-                        } else {
-                            alert('User registration failed. Please try again.');
-                        }
-                    } else {
-                        alert('Error during the request');
-                    }
-                }
-            };
-        });
-
-        function hashFunction(password) {
-            // Implement a secure hashing algorithm (e.g., SHA-256)
-            // This is a simplified example, use a proven library in a real scenario
-            var hash = btoa(password);
-            return hash;
-        }
-    </script>
 </body>
 
 </html>

@@ -1,3 +1,84 @@
+#!/usr/local/bin/php
+
+<?php 
+
+    include_once("database.php");
+    include_once("utility_functions.php");
+    session_start();
+
+    //checks if the user is already logged in and redirects appropriately
+    if(check_login()){
+        header("Location: index.php");
+        die;
+    }
+
+	if($_SERVER['REQUEST_METHOD'] == "POST")
+	{
+		//something was posted
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+
+        // Validate email using regex
+        $emailRegex = '/^[^\s@]+@[^\s@]+\.[^\s@]+$/';
+        if (!preg_match($emailRegex, $email)) {
+            echo 'Please enter a valid email address.';
+            return;
+        }
+
+        // Validate password using regex
+        $passwordRegex = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/';
+        if (!preg_match($passwordRegex, $password)) {
+            echo 'Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.';
+            return;
+        }
+
+		if(!empty($email) && !empty($password)){
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+			 // Query the database to check if the user exists
+             $dbConnection = connect();
+         
+             // Use prepared statements to prevent SQL injection
+             $query = "SELECT * FROM users WHERE UserID=? AND UserPasswordHash=?";
+             $stmt = $dbConnection->prepare($query);
+             $stmt->bind_param("ss", $email, $hashedPassword);
+             $stmt->execute();
+             $result = $stmt->get_result();
+
+             if ($result->num_rows == 1) {
+                // User authenticated successfully
+                $user = $result->fetch_assoc();
+                // Start session and set session token
+
+                $_SESSION['session_token'] = bin2hex(random_bytes(16));
+                $_SESSION['user_email'] = $user['UserID'];
+                $_SESSION['user_first_name'] = $user['UserFirstName'];
+                $_SESSION['user_last_name'] = $user['UserLastName'];
+
+                // save session token in database
+                $query = "UPDATE users SET UserSessionToken=? WHERE UserID=?";
+                $stmt = $dbConnection->prepare($query);
+                $stmt->bind_param("ss", $_SESSION['session_token'], $user['UserID']);
+                $stmt->execute();
+
+                disconnect($dbConnection);
+
+                // Redirect to home page
+                header("Location: index.php");
+                die;
+            } else {
+                disconnect($dbConnection);
+                // Authentication failed
+                echo "wrong username or password!";
+            }
+		}else
+		{
+			echo "wrong username or password!";
+		}
+	}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +120,7 @@
                                     <h6 class="h5 mb-0">Welcome back!</h6>
                                     <p class="text-muted mt-2 mb-5">Enter your email address and password to access your account.</p>
     
-                                    <form id="loginForm">
+                                    <form method='post'>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Email address</label>
                                             <input type="email" class="form-control" id="email" required>
@@ -80,60 +161,5 @@
         </div>
         <!-- Row -->
     </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-            
-            // Validate email using regex
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-            // Validate password using regex
-            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-            if (!passwordRegex.test(password)) {
-                alert('Password must be at least 8 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.');
-                return;
-            }
-
-            // Client-side password hashing (use a strong hashing library)
-            var hashedPassword = hashFunction(password);
-
-
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://localhost:3001/login', true); // Use HTTPS
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            xhr.send(JSON.stringify({ email: email, password: hashedPassword }));
-            
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.status === 'success') {
-                            window.location.href = 'https://localhost:3000/dashboard';
-                        } else {
-                            alert('Invalid username or password');
-                        }
-                    } else {
-                        alert('Error during the request');
-                    }
-                }
-            };
-        });
-
-        function hashFunction(password) {
-            // Implement a secure hashing algorithm (e.g., SHA-256)
-            // This is a simplified example, use a proven library in a real scenario
-            var hash = btoa(password);
-            return hash;
-        }
-    </script>
 </body>
 </html>
