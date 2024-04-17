@@ -10,7 +10,7 @@ body{
 }
 
 #faqBox{
-    width: 50vw; 
+    width: max(50vw, 500px); 
     height: 70vh;
     display: flex;
     flex-wrap: wrap;
