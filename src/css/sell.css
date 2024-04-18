@@ -15,7 +15,7 @@ body{
 
 .account-block {
     padding: 0;
-    background-image: url(./../../img/sellPic.png);
+    background-image: url(../../img/sellPic.png);
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
