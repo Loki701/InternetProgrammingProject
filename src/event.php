@@ -1,13 +1,13 @@
 #!/usr/local/bin/php
 <?php
-    session_start();
-    require_once("utilities/database.php");
-    require_once("utilities/utility_functions.php");
-    $isLoggedIn = check_login();
+session_start();
+require_once ("utilities/database.php");
+require_once ("utilities/utility_functions.php");
+$isLoggedIn = check_login();
 
-    $userID = $_SESSION['user_ID'];
+$userID = $_SESSION['user_ID'];
 
-    $connection = connect();
+$connection = connect();
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +27,7 @@
     <script>
     let params = new URLSearchParams(window.location.search);
     let isLoggedIn = <?php echo $isLoggedIn ? "true" : "false"; ?>;
+    let prevSection = 0;
 
     function initialize() {
         showMapView();
@@ -56,12 +57,17 @@
             }
         });
         $("#section-label").text(section);
+        $("#section" + prevSection).css("border", "");
+        $("#section" + prevSection).addClass("border border-dark");
+        $("#section" + section).css("border", "thick solid black");
+        $("#section" + section).removeClass("border border-dark");
+        prevSection = section;
     }
 
     function populateMapListings(listings) {
         $("#listings-map").empty();
         listings.forEach(function(listing) {
-            newListing = 
+            newListing =
                 "<li class='list-group-item' " +
                 "id='listing-list-" + listing.ListingID +
                 "' data-toggle='collapse' data-target='#details-list-" +
@@ -73,12 +79,12 @@
                 "<i class='bi bi-chevron-down'></i>" +
                 "</div>" +
                 "<div id='details-list-" + listing.ListingID + "' class='collapse font-weight-light'>";
-            if(listing.ListingNegotiable == 1) {
+            if (listing.ListingNegotiable == 1) {
                 newListing += "<div class='float-right'>" +
                     "<span class='badge badge-success'>Negotiable</span>" +
                     "</div>";
             }
-            if(isLoggedIn) {
+            if (isLoggedIn) {
                 newListing += "Contact: " + listing.UserID + "@ufl.edu";
             } else {
                 newListing += "Contact: " +
@@ -87,7 +93,7 @@
             }
             newListing += "</div>" + "</li>";
             $("#listings-map").append(newListing);
-            
+
         });
     }
 
@@ -108,7 +114,7 @@
     function populateListListings(listings) {
         $("#listings-list").empty();
         listings.forEach(function(listing) {
-            newListing = 
+            newListing =
                 "<li class='list-group-item' " +
                 "id='listing-list-" + listing.ListingID +
                 "' data-toggle='collapse' data-target='#details-list-" +
@@ -120,12 +126,12 @@
                 "<i class='bi bi-chevron-down'></i>" +
                 "</div>" +
                 "<div id='details-list-" + listing.ListingID + "' class='collapse font-weight-light'>";
-            if(listing.ListingNegotiable == 1) {
+            if (listing.ListingNegotiable == 1) {
                 newListing += "<div class='float-right'>" +
                     "<span class='badge badge-success'>Negotiable</span>" +
                     "</div>";
             }
-            if(isLoggedIn) {
+            if (isLoggedIn) {
                 newListing += "Contact: " + listing.UserID + "@ufl.edu";
             } else {
                 newListing += "Contact: " +
@@ -134,7 +140,7 @@
             }
             newListing += "</div>" + "</li>";
             $("#listings-list").append(newListing);
-            
+
         });
     }
 
@@ -192,53 +198,54 @@
                 <div class="row">
                     <div class="col-4"><br><br><br><br></div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(29);"
-                        style="cursor: pointer;">29</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section29">29</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(31);"
-                        style="cursor: pointer;">31</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section31">31</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(33);"
-                        style="cursor: pointer;">33</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section33">33</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(35);"
-                        style="cursor: pointer;">35</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section35">35</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(37);"
-                        style="cursor: pointer;">37</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section37">37</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(39);"
-                        style="cursor: pointer;">39</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section39">39</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(41);"
-                        style="cursor: pointer;">41</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section41">41</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(43);"
-                        style="cursor: pointer;">43</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section43">43</div>
                 </div> <!-- section row 1 -->
 
                 <div class="row">
                     <div class="col-1"><br><br><br><br></div>
                     <div class="col-2 border border-dark text-center" onclick="selectSection(26);"
-                        style="cursor: pointer;">26</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section26">26</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(28);"
-                        style="cursor: pointer;">28</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section28">28</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(30);"
-                        style="cursor: pointer;">30</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section30">30</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(32);"
-                        style="cursor: pointer;">32</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section32">32</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(34);"
-                        style="cursor: pointer;">34</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section34">34</div>
                     <div class="col-2 border border-dark border-bottom-0"></div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(40);"
-                        style="cursor: pointer;">40</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section40">40</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(42);"
-                        style="cursor: pointer;">42</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section42">42</div>
                     <div class="col-1 border border-dark text-center" onclick="selectSection(44);"
-                        style="cursor: pointer;">44</div>
+                        style="cursor: pointer; display: grid; place-content: center;" id="section44">44</div>
                 </div> <!-- section row 2 -->
 
                 <div class="row">
                     <div class="col-3 text-center">
                         <div class="row h-100">
                             <div class="col-12 h-20 d-inline-block border border-dark text-center"
-                                onclick="selectSection(25);" style="cursor: pointer;">25</div>
+                                onclick="selectSection(25);"
+                                style="cursor: pointer; display: grid; place-content: center;" id="section25">25</div>
                             <div class="col-12 border border-dark text-center" onclick="selectSection(24);"
-                                style="cursor: pointer;">24</div>
+                                style="cursor: pointer; display: grid; place-content: center;" id="section24">24</div>
                             <div class="col-12 border border-dark text-center" onclick="selectSection(23);"
-                                style="cursor: pointer;">23</div>
+                                style="cursor: pointer; display: grid; place-content: center;" id="section23">23</div>
                             <div class="col-12"></div>
                             <div class="col-12"></div>
                             <div class="col-12"></div>
