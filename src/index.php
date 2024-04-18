@@ -70,15 +70,16 @@
             <?php
             require_once ("utilities/database.php");
             $connection = connect();
-            $events = getAllEvents($connection);
+            $events = getAllEventsWithListingCount($connection);
             while ($event = mysqli_fetch_assoc($events)) {
                 $date = new DateTimeImmutable($event['EventDate']);
                 $dateString = $date->format('F j, Y');
 
                 echo "<a href='event.php?id=" . $event['EventID'] . "' id='event-" . $event['EventID'],
-                    "' class='col-lg-3 card rounded-xl mr-4 mt-4 p-4 bg-cream '>",
+                    "' class='col-lg-3 card rounded-xl mr-4 mt-4 p-4 bg-cream' style='color: inherit; text-decoration: inherit;'>",
                     "<h3 class='text-center' id='name'>" . $event['EventName'] . "</h3>",
-                    "<h6 class='text-center' id='date'>" . $dateString . "</h6><br>",
+                    "<h6 class='text-center' id='date'>" . $dateString . "</h6>",
+                    "<h8 class='text-center text-secondary font-weight-light' id='listing_count'>" . $event['ListingCount'] . " Available Listings</h8><br>",
                     "<img src='../img/logos/" . $event['EventImageFile'] . "'>",
                     "</a>";
             }
