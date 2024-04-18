@@ -1,4 +1,14 @@
 #!/usr/local/bin/php
+<?php
+    session_start();
+    require_once("utilities/database.php");
+    require_once("utilities/utility_functions.php");
+    $isLoggedIn = check_login();
+
+    $userID = $_SESSION['user_ID'];
+
+    $connection = connect();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +26,7 @@
 
     <script>
     let params = new URLSearchParams(window.location.search);
+    let isLoggedIn = <?php echo $isLoggedIn ? "true" : "false"; ?>;
 
     function initialize() {
         showMapView();
@@ -50,21 +61,33 @@
     function populateMapListings(listings) {
         $("#listings-map").empty();
         listings.forEach(function(listing) {
-            $("#listings-map").append(
+            newListing = 
                 "<li class='list-group-item' " +
-                "id='listing-map-" + listing.ListingID +
-                "' data-toggle='collapse' data-target='#details-map-" +
+                "id='listing-list-" + listing.ListingID +
+                "' data-toggle='collapse' data-target='#details-list-" +
                 listing.ListingID + "'>" +
-                "Row: " + listing.ListingRow + ", Seat " + listing.ListingSeat +
+                "Row: " + listing.ListingRow + ", Seat " + listing
+                .ListingSeat + "" +
                 "<div class='float-right'>" +
                 "<span class='badge badge-secondary badge-pill'>$" + listing.ListingPrice + "</span>" +
                 "<i class='bi bi-chevron-down'></i>" +
                 "</div>" +
-                "<div id='details-map-" + listing.ListingID + "' class='collapse'>" +
-                "Contact: " + listing.UserID + "@ufl.edu" +
-                "</div>" +
-                "</li>"
-            );
+                "<div id='details-list-" + listing.ListingID + "' class='collapse font-weight-light'>";
+            if(listing.ListingNegotiable == 1) {
+                newListing += "<div class='float-right'>" +
+                    "<span class='badge badge-success'>Negotiable</span>" +
+                    "</div>";
+            }
+            if(isLoggedIn) {
+                newListing += "Contact: " + listing.UserID + "@ufl.edu";
+            } else {
+                newListing += "Contact: " +
+                    "<a href='login.php'>Log In</a>" +
+                    " to view.";
+            }
+            newListing += "</div>" + "</li>";
+            $("#listings-map").append(newListing);
+            
         });
     }
 
@@ -85,22 +108,33 @@
     function populateListListings(listings) {
         $("#listings-list").empty();
         listings.forEach(function(listing) {
-            $("#listings-list").append(
+            newListing = 
                 "<li class='list-group-item' " +
                 "id='listing-list-" + listing.ListingID +
                 "' data-toggle='collapse' data-target='#details-list-" +
                 listing.ListingID + "'>" +
                 "Section: " + listing.ListingSection + ", Row: " + listing.ListingRow + ", Seat " + listing
-                .ListingSeat +
+                .ListingSeat + "" +
                 "<div class='float-right'>" +
                 "<span class='badge badge-secondary badge-pill'>$" + listing.ListingPrice + "</span>" +
                 "<i class='bi bi-chevron-down'></i>" +
                 "</div>" +
-                "<div id='details-list-" + listing.ListingID + "' class='collapse'>" +
-                "Contact: " + listing.UserID + "@ufl.edu" +
-                "</div>" +
-                "</li>"
-            );
+                "<div id='details-list-" + listing.ListingID + "' class='collapse font-weight-light'>";
+            if(listing.ListingNegotiable == 1) {
+                newListing += "<div class='float-right'>" +
+                    "<span class='badge badge-success'>Negotiable</span>" +
+                    "</div>";
+            }
+            if(isLoggedIn) {
+                newListing += "Contact: " + listing.UserID + "@ufl.edu";
+            } else {
+                newListing += "Contact: " +
+                    "<a href='login.php'>Log In</a>" +
+                    " to view.";
+            }
+            newListing += "</div>" + "</li>";
+            $("#listings-list").append(newListing);
+            
         });
     }
 
@@ -116,8 +150,6 @@
     </script>
 
     <?php
-    require_once ("utilities/database.php");
-    $connection = connect();
     $eventID = $_GET['id'];
     $event = getEvent($connection, $eventID);
     ?>
