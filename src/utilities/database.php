@@ -56,13 +56,6 @@ function getAllEvents($connection)
     return $result;
 }
 
-function getAllEventsWithListingCount($connection)
-{
-    $query = "SELECT Event.*, COUNT(ListingID) AS ListingCount FROM Event LEFT JOIN Listing ON Event.EventID = Listing.EventID GROUP BY Event.EventID ORDER BY EventDate ASC";
-    $result = mysqli_query($connection, $query);
-    return $result;
-}
-
 function getEvent($connection, $eventID)
 {
     $query = "SELECT * FROM Event WHERE EventID = '$eventID'";
@@ -148,6 +141,10 @@ function deleteListing($connection, $listingID)
     return $result;
 }
 
-
-
+function getEventsAveragePrices($connection)
+{
+    $query = "SELECT EventID, AVG(ListingPrice) AS AveragePrice FROM Listing GROUP BY EventID";
+    $result = mysqli_query($connection, $query);
+    return $result;
+}
 ?>
