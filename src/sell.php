@@ -16,6 +16,7 @@
     $row = mysqli_fetch_assoc($result);
     $firstEventName = $row['EventName'];
     $firstEventID = $row['EventID'];
+    $firstEventImageFile = $row['EventImageFile']
 ?>
 
 <!DOCTYPE html>
@@ -45,9 +46,21 @@
     ?>
     <script>
         $(document).ready(function() {
+            var firstImage = <?php echo json_encode($firstEventImageFile); ?>;
+            var firstEventID = <?php echo json_encode($firstEventID); ?>;
+            $("#game-image").css("background-image", `url(./../img/logos/${firstImage})`);
+            $(`#average-${firstEventID}`).css("display", "inline");
+
             $('a[name=games]').click(function() {
+                const id = $(this).attr('value');
                 $("#dropdownMenuButton").html($(this).html());
-                $("#game").val($(this).attr('value'));
+                $("#game").val(id);
+                var imagePath = $(`#eventid-${id}`).attr('value');
+                console.log(imagePath);
+                $("#game-image").css("background-image", `url(./../img/logos/${imagePath})`);
+
+                $("small[name='averages']").css("display", "none");
+                $(`#average-${id}`).css("display", "inline");
             });
         });
     </script>
@@ -91,6 +104,7 @@
                                                         $result = getAllEvents($connection);
                                                         while ($row = mysqli_fetch_assoc($result)) {
                                                             echo "<a class='dropdown-item' href='javascript:void(0);' name='games' value=" . $row['EventID'] . ">" . $row['EventName'] . "</a>";
+                                                            echo "<span class='hidden-span' id='eventid-" . $row['EventID'] . "' value='" . $row['EventImageFile'] . "'></span>"; //hacky way of storing data :sob:
                                                         }
                                                         ?>
                                                     </div>
@@ -123,6 +137,12 @@
                                             <label for="price" class="col-sm-3 col-form-label">Price</label>
                                             <div class="col-sm-7 offset-sm-1">
                                                 <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" placeholder="20.00" required>
+                                                <?php
+                                                $result = getEventsAveragePrices($connection);
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo "<small class='text-muted' name='averages' id='average-" . $row["EventID"] . "' style='display: none;'>Average listing price: $" . number_format($row["AveragePrice"], 2) . "</small>";
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -142,7 +162,7 @@
                             </div>
 
                             <div class="col-lg-6 d-none d-lg-inline-block">
-                                <div class="account-block rounded-right">
+                                <div id="game-image" class="account-block rounded-right">
                                     <div class="overlay rounded-right"></div>
                                 </div>
                             </div>
@@ -153,4 +173,5 @@
         </div>
     </div>
 </body>
+
 </html>
