@@ -70,11 +70,14 @@
 <body>
     <!-- Navbar -->
     <div id="nav-placeholder"></div>
-    <script>
+    <script type="text/javascript">
         $(function() {
             $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-                if (statusTxt == "success")
+                if (statusTxt == "success") {
                     $("#nav-sell").addClass("active");
+                    $("#nav-signup").addClass("d-none");
+                    $("#nav-login").addClass("d-none");
+                }     
             });
         });
     </script>
