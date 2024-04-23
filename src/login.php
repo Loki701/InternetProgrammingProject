@@ -80,13 +80,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body>
     <div id="nav-placeholder"></div>
-    <script>
-    $(function() {
-        $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-            if (statusTxt == "success")
-                $("#nav-profile").addClass("active");
+    <script type="text/javascript">
+        $(function() {
+            $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success") {
+                    $("#nav-login").addClass("active");
+                    $("#nav-profile").addClass("d-none");
+                }     
+            });
         });
-    });
     </script>
     <br><br>
 

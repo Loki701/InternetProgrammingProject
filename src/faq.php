@@ -1,3 +1,10 @@
+#!/usr/local/bin/php
+<?php
+session_start();
+    require_once("utilities/utility_functions.php");
+    $loggedIn = check_login();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -15,11 +22,19 @@
 
     <body>
         <div id="nav-placeholder"></div>
-        <script>
-            $(function(){
-                $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr){
-                    if(statusTxt == "success")
+        <script type="text/javascript">
+            var loggedIn = <?php echo json_encode($loggedIn); ?>;
+            $(function() {
+                $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+                    if (statusTxt == "success") {
                         $("#nav-faq").addClass("active");
+                        if(loggedIn) {
+                            $("#nav-signup").addClass("d-none");
+                            $("#nav-login").addClass("d-none");
+                        } else {
+                            $("#nav-profile").addClass("d-none");
+                        }
+                    }     
                 });
             });
         </script>

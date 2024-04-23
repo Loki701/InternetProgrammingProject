@@ -163,13 +163,21 @@ $connection = connect();
 
 <body onload="initialize();">
     <div id="nav-placeholder"></div>
-    <script>
-    $(function() {
-        $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-            if (statusTxt == "success")
-                $("#nav-home").addClass("active");
+    <script type="text/javascript">
+        var loggedIn = <?php echo json_encode($isLoggedIn); ?>;
+        $(function() {
+            $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success") {
+                    $("#nav-home").addClass("active");
+                    if (loggedIn) {
+                        $("#nav-signup").addClass("d-none");
+                        $("#nav-login").addClass("d-none");
+                    } else {
+                        $("#nav-profile").addClass("d-none");
+                    }
+                }
+            });
         });
-    });
     </script>
 
     <div class="container bg-white">

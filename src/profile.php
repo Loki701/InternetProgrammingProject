@@ -71,13 +71,17 @@ echo "id: " . $userID;
 
 <body class="bg-light">
     <div id="nav-placeholder"></div>
-    <script>
-    $(function() {
-        $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-            if (statusTxt == "success")
-                $("#nav-profile").addClass("active");
+    <script type="text/javascript">
+        var loggedIn = <?php echo json_encode($loggedIn); ?>;
+        $(function() {
+            $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success") {
+                    $("#nav-profile").addClass("active");
+                    $("#nav-signup").addClass("d-none");
+                    $("#nav-login").addClass("d-none");
+                }     
+            });
         });
-    });
     </script>
     <div id="main" class="container">
         <div class="row ml-3">

@@ -47,8 +47,7 @@
     <script>
     $(function() {
         $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-            if (statusTxt == "success")
-                $("#nav-home").addClass("active");
+            
         });
     });
     </script>
