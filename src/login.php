@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 if (statusTxt == "success") {
                     $("#nav-login").addClass("active");
                     $("#nav-profile").addClass("d-none");
+                    $("#nav-logout").addClass("d-none");
                 }     
             });
         });

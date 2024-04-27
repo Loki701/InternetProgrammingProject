@@ -79,7 +79,8 @@ echo "id: " . $userID;
                     $("#nav-profile").addClass("active");
                     $("#nav-signup").addClass("d-none");
                     $("#nav-login").addClass("d-none");
-                }     
+                } 
+                
             });
         });
     </script>

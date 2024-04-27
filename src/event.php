@@ -169,11 +169,18 @@ $connection = connect();
             $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
                 if (statusTxt == "success") {
                     $("#nav-home").addClass("active");
-                    if (loggedIn) {
+                    if(loggedIn) {
                         $("#nav-signup").addClass("d-none");
                         $("#nav-login").addClass("d-none");
+
+                        $("#nav-logout").removeClass("d-none");
+                        ("#nav-profile").removeClass("d-none");
                     } else {
                         $("#nav-profile").addClass("d-none");
+                        $("#nav-logout").addClass("d-none");
+
+                        $("#nav-signup").removeClass("d-none");
+                        $("#nav-login").removeClass("d-none");
                     }
                 }
             });
