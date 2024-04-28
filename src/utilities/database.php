@@ -134,6 +134,13 @@ function addListing($connection, $userID, $eventID, $listingPrice, $listingSecti
     return $result;
 }
 
+function modifyListing($connection, $listingID, $listingPrice, $listingSection, $listingRow, $listingSeat, $listingNegotiable)
+{
+    $query = "UPDATE Listing SET ListingPrice='$listingPrice', ListingSection='$listingSection', ListingRow='$listingRow', ListingSeat='$listingSeat', ListingNegotiable='$listingNegotiable' WHERE ListingID='$listingID'";
+    $result = mysqli_query($connection, $query);
+    return $result;
+}
+
 function deleteUser($connection, $userID)
 {
     $query = "DELETE FROM User WHERE UserID = '$userID'";

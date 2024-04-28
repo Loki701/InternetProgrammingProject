@@ -44,7 +44,7 @@ echo "id: " . $userID;
                                 <b>Seat: </b><span id="seat">${seat}</span><br><br>
                                 <b>Price: </b><span id="price">${price}</span><br><br>
                                 <div class="d-flex justify-content-center">
-                                    <input type="button" class="btn btn-primary mr-1" value="Edit">
+                                    <input type="button" name="editListing" class="btn btn-primary mr-1" value="Edit">
                                     <input type="button" class="btn btn-primary ml-1" value="Mark Sold">
                                 </div>
                             </div>`;
