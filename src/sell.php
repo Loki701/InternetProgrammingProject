@@ -121,25 +121,26 @@
                                         <div class="form-group row">
                                             <label for="section" class="col-sm-3 col-form-label">Section</label>
                                             <div class="col-sm-7 offset-sm-1">
-                                                <input type="number" min="23" max="44" class="form-control" id="section" name="section" placeholder="32" required>
+                                                <input type="number" min="23" max="44" class="form-control" id="section" name="section" value="32" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="row" class="col-sm-3 col-form-label">Row</label>
                                             <div class="col-sm-7 offset-sm-1">
-                                                <input type="number" min="0" class="form-control" id="row" name="row" placeholder="4" required>
+                                                <input type="number" min="0" class="form-control" id="row" name="row" value="4" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="seat" class="col-sm-3 col-form-label">Seat</label>
                                             <div class="col-sm-7 offset-sm-1">
-                                                <input type="number" min="0" class="form-control" id="seat" name="seat" placeholder="17" required>
+                                                <input type="number" min="0" class="form-control" id="seat" name="seat" value="17" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="price" class="col-sm-3 col-form-label">Price</label>
                                             <div class="col-sm-7 offset-sm-1">
-                                                <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" placeholder="20.00" required>
+                                                <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" value="20.00"
+                                                    onchange="(function(i){i.value=parseFloat(i.value).toFixed(2);})(this)" required>
                                                 <?php
                                                 $result = getEventsAveragePrices($connection);
                                                 while ($row = mysqli_fetch_assoc($result)) {
