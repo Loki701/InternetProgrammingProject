@@ -85,6 +85,7 @@ $loggedIn = check_login();
             To find instructions on how to transfer student section tickets, see
             <a href="https://floridagators.com/sports/2021/8/31/mobile-ticketing-transfer-tickets.aspx" target="_blank">this article</a>
             on the Florida Gators Ticket Office site.
+        </p>
         <br>
         <h2>How do I buy a ticket?</h2>
         <p>

@@ -21,6 +21,20 @@ function getAllUsers($connection)
     return $result;
 }
 
+function getUser($connection, $userID)
+{
+    $query = "SELECT UserID, UserFirstName, UserLastName FROM User WHERE UserID = '$userID'";
+    $result = mysqli_query($connection, $query);
+    $user = mysqli_fetch_assoc($result);
+    return $user;
+}
+
+{
+    $query = "SELECT * FROM User";
+    $result = mysqli_query($connection, $query);
+    return $result;
+}
+
 function doesUserExist($connection, $userID)
 {
     $query = "SELECT * FROM User WHERE UserID = '$userID'";
@@ -109,6 +123,13 @@ function getListingsByEventSection($connection, $eventID, $section, $order)
 {
     $order = replaceOrderString($order);
     $query = "SELECT * FROM Listing WHERE EventID = '$eventID' AND ListingSection = '$section' ORDER BY $order ASC";
+    $result = mysqli_query($connection, $query);
+    return $result;
+}
+
+function getListingsByUser($connection, $userID)
+{
+    $query = "SELECT l.ListingID, l.ListingPrice, l.ListingSection, l.ListingRow, l.ListingSeat, l.ListingNegotiable, e.EventName FROM Listing l INNER JOIN Event e ON l.EventID = e.EventID WHERE l.UserID = '$userID'";
     $result = mysqli_query($connection, $query);
     return $result;
 }

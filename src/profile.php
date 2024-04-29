@@ -10,7 +10,9 @@ if (!check_login()) {
 
 // Can use session variables to get user data and display it
 $userID = $_SESSION['user_ID'];
-echo "id: " . $userID;
+require_once ("utilities/database.php");
+$connection = connect();
+$user = getUser($connection, $userID);
 
 ?>
 
@@ -36,8 +38,8 @@ echo "id: " . $userID;
         'Vanderbilt'
     ];
 
-    function newListing(number, game, section, row, seat, price) {
-        let listing = `<div id="listing-${number}" class="col-lg-3 rounded-xl mr-4 mt-4 p-4 bg-cream">
+    function newListing(id, game, section, row, seat, price) {
+        let listing = `<div id="listing-${id}" class="col-lg-3 rounded-xl mr-4 mt-4 p-4 bg-cream">
                                 <h3 id="game">${game}</h3><br><br>
                                 <b>Section: </b><span id="section">${section}</span><br>
                                 <b>Row: </b><span id="row">${row}</span><br>
@@ -51,8 +53,6 @@ echo "id: " . $userID;
         $("#listings").append(listing);
     }
     $(document).ready(function() {
-        $("#name").html(name)
-        $("#email").html(email)
         $("#profile_picture").attr("src", profilePicture);
 
         for (let i = 0; i < 10; i++) {
@@ -63,7 +63,7 @@ echo "id: " . $userID;
             let seat = Math.floor(Math.random() * 15) + 1;
             let price = "$" + (Math.floor(Math.random() * 150) + 1);
 
-            newListing(i + 1, game, section, row, seat, price);
+            //newListing(i + 1, game, section, row, seat, price);
         }
     });
     </script>
@@ -93,8 +93,12 @@ echo "id: " . $userID;
                 <img id="profile_picture" src="../img/profile_picture.png">
             </div>
             <div class="col-md-4">
-                <label>Name:</label> <span id="name"></span><br>
-                <label>Email:</label> <span id="email"></span><br>
+                <label><b>Name:</b></label> <span id="name">
+                    <?php echo $user['UserFirstName'] . ' ' . $user['UserLastName']; ?>
+                </span><br>
+                <label><b>Email:</b></label> <span id="email">
+                    <?php echo $user['UserID'] . '@ufl.edu'; ?>
+                </span><br>
             </div>
         </div>
         <div class="row mt-5"></div>
@@ -104,6 +108,15 @@ echo "id: " . $userID;
         <div id="listings" class="row ml-3 justify-content-center">
             <!-- Listings get added here programmatically -->
         </div>
+        <script>
+            <?php
+            $listings = getListingsByUser($connection, $userID);
+            while ($listing = mysqli_fetch_assoc($listings)) {
+                echo "newListing(" . $listing['ListingID'] . ", '" . $listing['EventName'] . "', '" . $listing['ListingSection'] . "', '" . $listing['ListingRow'] . "', '" . $listing['ListingSeat'] . "', '" . $listing['ListingPrice'] . "');";
+            }
+            disconnect($connection);
+            ?>
+        </script>
     </div>
 </body>
 
