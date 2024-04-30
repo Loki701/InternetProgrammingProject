@@ -17,11 +17,25 @@
 
     <?php
     require_once ("utilities/database.php");
-    // Sample Listing: [ListingID] => 1 [UserID] => dev [EventID] => 1 [ListingPrice] => 20.00 [ListingSection] => 42 [ListingRow] => 10 [ListingSeat] => 3 [ListingNegotiable] => 1
-    // Sample Event: [EventID] => 1 [EventName] => Gator Football [EventDate] => 2022-09-03 [EventImageFile] => alabama
-    // Sample User: [UserID] => dev [UserPassword] => pass
-    
+    require_once("utilities/utility_functions.php");
     $connection = connect();
+
+    session_start();
+
+    //Check if user is logged in already before validating whether they are admin or not:
+    if (!check_login()) {
+         header("Location: login.php");
+          die;
+    }
+
+    //Validataion to confirm they are admin or not:
+    $userID = $_SESSION['user_ID'];
+
+    //Note the user ID portion absent a SQL column is hard coded for now:
+    if($userID != "spallonea" && $userID != "matdev" && $userID != "kevindaniel" && $userID != "j.figueredo"){
+        header("Location: index.php");
+        die;
+    }
 
     if ($_POST['action']) {
         if ($_POST['action'] == 'addUser') {
@@ -44,12 +58,18 @@
 
 <body class="bg-light">
     <div id="nav-placeholder"></div>
-    <script>
-    $(function() {
-        $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-            
+    <script type="text/javascript">
+        var loggedIn = <?php echo json_encode($loggedIn); ?>;
+        $(function() {
+            $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success") {
+                    $("#nav-profile").addClass("active");
+                    $("#nav-signup").addClass("d-none");
+                    $("#nav-login").addClass("d-none");
+                } 
+                
+            });
         });
-    });
     </script>
 
     <div class="container">
