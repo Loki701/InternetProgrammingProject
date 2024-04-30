@@ -16,29 +16,46 @@
 
 
     <?php
-    require_once ("utilities/database.php");
-    // Sample Listing: [ListingID] => 1 [UserID] => dev [EventID] => 1 [ListingPrice] => 20.00 [ListingSection] => 42 [ListingRow] => 10 [ListingSeat] => 3 [ListingNegotiable] => 1
-    // Sample Event: [EventID] => 1 [EventName] => Gator Football [EventDate] => 2022-09-03 [EventImageFile] => alabama
-    // Sample User: [UserID] => dev [UserPassword] => pass
-    
-    $connection = connect();
+      require_once ("utilities/database.php");
+      require_once ("utilities/utility_functions.php");
+      // Sample Listing: [ListingID] => 1 [UserID] => dev [EventID] => 1 [ListingPrice] => 20.00 [ListingSection] => 42 [ListingRow] => 10 [ListingSeat] => 3 [ListingNegotiable] => 1
+      // Sample Event: [EventID] => 1 [EventName] => Gator Football [EventDate] => 2022-09-03 [EventImageFile] => alabama
+      // Sample User: [UserID] => dev [UserPassword] => pass
 
-    if ($_POST['action']) {
-        if ($_POST['action'] == 'addUser') {
-            addUser($connection, $_POST['userID'], $_POST['userPasswordHash'], $_POST['userFirstName'], $_POST['userLastName']);
-        } else if ($_POST['action'] == 'addEvent') {
-            addEvent($connection, $_POST['eventName'], $_POST['eventDate'], $_POST['eventImageFile']);
-        } else if ($_POST['action'] == 'addListing') {
-            addListing($connection, $_POST['userID'], $_POST['eventID'], $_POST['listingPrice'], $_POST['listingSection'], $_POST['listingRow'], $_POST['listingSeat'], $_POST['listingNegotiable']);
-        } else if ($_POST['action'] == 'deleteUser') {
-            deleteUser($connection, $_POST['userID']);
-        } else if ($_POST['action'] == 'deleteEvent') {
-            deleteEvent($connection, $_POST['eventID']);
-        } else if ($_POST['action'] == 'deleteListing') {
-            deleteListing($connection, $_POST['listingID']);
-        }
-        $_POST = array();
-    }
+      session_start();
+
+      //Check if user is logged in already before validating whether they are admin or not:
+      if (!check_login()) {
+           header("Location: login.php");
+            die;
+      }
+      
+      //Validataion to confirm they are admin or not:
+      $userID = $_SESSION['user_ID'];
+      $connection = connect();
+      $user = getUser($connection, $userID);
+
+      //Note the user ID portion absent a SQL column is hard coded for now:
+      if($user["UserID"] != "spallonea" && $user["UserID"] != "matdev" && $user["UserID"] != "kevindaniel" && $user["UserID"] != "j.figueredo"){
+        header("Location: index.php");
+      }
+      
+      if ($_POST['action']) {
+          if ($_POST['action'] == 'addUser') {
+              addUser($connection, $_POST['userID'], $_POST['userPasswordHash'], $_POST['userFirstName'], $_POST['userLastName']);
+          } else if ($_POST['action'] == 'addEvent') {
+              addEvent($connection, $_POST['eventName'], $_POST['eventDate'], $_POST['eventImageFile']);
+          } else if ($_POST['action'] == 'addListing') {
+              addListing($connection, $_POST['userID'], $_POST['eventID'], $_POST['listingPrice'], $_POST['listingSection'], $_POST['listingRow'], $_POST['listingSeat'], $_POST['listingNegotiable']);
+          } else if ($_POST['action'] == 'deleteUser') {
+              deleteUser($connection, $_POST['userID']);
+          } else if ($_POST['action'] == 'deleteEvent') {
+              deleteEvent($connection, $_POST['eventID']);
+          } else if ($_POST['action'] == 'deleteListing') {
+              deleteListing($connection, $_POST['listingID']);
+          }
+          $_POST = array();
+      }
     ?>
 </head>
 
@@ -47,8 +64,7 @@
     <script>
     $(function() {
         $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
-            if (statusTxt == "success")
-                $("#nav-home").addClass("active");
+            
         });
     });
     </script>
@@ -73,6 +89,7 @@
         echo "<th>UserPasswordHash</th>";
         echo "<th>UserFirstName</th>";
         echo "<th>UserLastName</th>";
+        echo "<th>Token</th>";
         echo "<th>Actions</th>";
         echo "</tr>";
 
@@ -82,6 +99,7 @@
             echo "<td>" . $row['UserPasswordHash'] . "</td>";
             echo "<td>" . $row['UserFirstName'] . "</td>";
             echo "<td>" . $row['UserLastName'] . "</td>";
+            echo "<td>" . $row["UserSessionToken"] . "</td>";
             //echo "<td><a href='admin.php?action=deleteUser&userID=" . $row['UserID'] . "'>Delete</a></td>";
             echo "<td><form action='admin.php' method='post'><input type='hidden' name='action' value='deleteUser'><input type='hidden' name='userID' value='" . $row['UserID'] . "'><input class='btn btn-outline-secondary' type='submit' value='Delete'></form></td>";
             echo "</tr>";
