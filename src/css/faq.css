@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'Jersey';
+    src: url('../font/Jersey\ M54.ttf') format('truetype');
+}
+
+body {
+    background-color: rgb(35, 34, 34);
+    color: #f9f5f0;
+}
+
+
+h1 {
+    font-family: 'Jersey', sans-serif;
+    text-align: center;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Jersey', sans-serif;
+}
+
+a {
+    font-family: 'Jersey', sans-serif;
+}
+
+p {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}

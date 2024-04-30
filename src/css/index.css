@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Jersey';
+    src: url('../font/Jersey\ M54.ttf') format('truetype');
+}
+
 .bg-cream {
     background-color: #EBEDD7;
 }
@@ -8,4 +13,45 @@ img {
 
 .rounded-xl {
     border-radius: 1.5em;
+}
+
+.welcome-heading {
+    font-family: "Jersey", sans-serif;
+}
+
+.subheading-container {
+    text-align: center;
+    font-family: "Arial", sans-serif;
+}
+
+.events-heading {
+    font-family: "Jersey", sans-serif;
+}
+
+.bg-light-blue {
+    background-color: #000000;
+}
+
+body {
+    background-color: black;
+    color: #f9f5f0;
+}
+
+body {
+    font-family: 'Jersey', 'Times New Roman', Times, serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+    font-family: 'Jersey', sans-serif;
+}
+
+.card {
+    border: 1px solid white;
 }
