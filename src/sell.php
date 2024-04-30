@@ -16,7 +16,7 @@
     $row = mysqli_fetch_assoc($result);
     $firstEventName = $row['EventName'];
     $firstEventID = $row['EventID'];
-    $firstEventImageFile = $row['EventImageFile']
+    $firstEventImageFile = $row['EventImageFile'];
 ?>
 
 <!DOCTYPE html>

@@ -41,13 +41,29 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         echo $hashedPassword;
 
         if (!doesUserExist($connection, $userID)) {
-            //if not exists then add user
-            //echo "addUser($connection, $userID, $hashedPassword, $firstName, $lastName);";
-            addUser($connection, $userID, $hashedPassword, $firstName, $lastName);
+            //if not exists then send verification email
+            
+            //addUser($connection, $userID, $hashedPassword, $firstName, $lastName);
+            $secret = "0c_@5e9.ay2'*hn9b8LY";
+            $verifyUserID = urlencode($userID);
+            $verifyFirstName = urlencode($firstName);
+            $verifyLastName = urlencode($lastName);
+            $verifyHashedPassword = urlencode($hashedPassword);
+
+            $tohash = $secret . $userID . $firstName . $lastName . $hashedPassword;
+            $hash = md5($tohash);
+            $verifyURL = "https://www.cise.ufl.edu/~mateuszplaza/InternetProgrammingProject/src/emailverify.php?uid=$verifyUserID&fn=$verifyFirstName&ln=$verifyLastName&hp=$verifyHashedPassword&hash=$hash";
+            $to = $userID . "@ufl.edu";
+            $subject = "Gator Ticket Swap: Verify Your E-mail";
+            $headers = "From: noreply@gator-ticket-swap.com\r\n";
+            $message = "Click the link below to verify your email address:\n\n$verifyURL";
+
+            mail($to, $subject, $message, $headers);
+
 
             disconnect($connection);
-            // Redirect to login page
-            header("Location: login.php");
+            // Redirect to verification page
+            header("Location: emailverify.php");
             die;
         } else {
             $error_message = 'User already exists.';
