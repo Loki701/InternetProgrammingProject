@@ -23,21 +23,13 @@
     const games = ['Alabama', 'Georgia', 'Tennessee', 'Auburn', 'LSU', 'Kentucky', 'Mississippi', 'Mississippi State',
         'Vanderbilt'
     ];
-
+    
     function newEvent(game, number) {
         var event =
             `<div id="event-${number}" class="col-lg-3 card rounded-xl mr-4 mt-4 p-4 bg-cream "><h3 class="text-center" id="game">${game}</h3><br><img src="../img/logos/${game.toLowerCase()}.png"></div>`
         $("#events").append(event);
         $(`#event-${number}`).height($(`#event-${number}`).width() * 4 / 3);
     }
-
-    $(document).ready(function() {
-        //Temporarily generating random values as placeholders, once backend is implemented, replace random values with fetched values.
-        /*for (let i = 0; i < 10; i++) {
-            let game = games[Math.floor(Math.random() * games.length)];
-            newEvent(game, i + 1);
-        }*/
-    });
 
     $(window).on("resize", function() {
         var count = $("#events").children().length;
@@ -50,7 +42,7 @@
 
 <body>
     <div id="nav-placeholder"></div>
-    <script type="text/javascript">
+    <script>
         var loggedIn = <?php echo json_encode($loggedIn); ?>;
         $(function() {
             $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
@@ -99,10 +91,10 @@
 
                 echo "<a href='event.php?id=" . $event['EventID'] . "' id='event-" . $event['EventID'],
                     "' class='col-lg-3 card rounded-xl mr-4 mt-4 p-4 bg-light-blue' style='color: inherit; text-decoration: inherit;'>",
-                    "<h3 class='text-center' id='name'>" . $event['EventName'] . "</h3>",
-                    "<h6 class='text-center' id='date'>" . $dateString . "</h6>",
-                    "<h8 class='text-center text-secondary font-weight-light' id='listing_count'>" . $event['ListingCount'] . " Available Listings</h8><br>",
-                    "<img src='../img/logos/" . $event['EventImageFile'] . "'>",
+                    "<h3 class='text-center'>" . $event['EventName'] . "</h3>",
+                    "<h6 class='text-center'>" . $dateString . "</h6>",
+                    "<h6 class='text-center text-secondary font-weight-light'>" . $event['ListingCount'] . " Available Listings</h6><br>",
+                    "<img src='../img/logos/" . $event['EventImageFile'] . "' alt='Opponent Logo'>",
                     "</a>";
             }
             disconnect($connection);

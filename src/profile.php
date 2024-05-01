@@ -16,6 +16,7 @@ $user = getUser($connection, $userID);
 
 ?>
 
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -115,7 +116,7 @@ $user = getUser($connection, $userID);
 
 <body class="bg-light">
     <div id="nav-placeholder"></div>
-    <script type="text/javascript">
+    <script>
         var loggedIn = <?php echo json_encode($loggedIn); ?>;
         $(function() {
             $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
@@ -134,7 +135,7 @@ $user = getUser($connection, $userID);
         </div>
         <div class="row align-items-center ml-3">
             <div class="col-md-3">
-                <img id="profile_picture" src="../img/profile_picture.png">
+                <img id="profile_picture" src="../img/profile_picture.png" alt="Profile Picture">
             </div>
             <div class="col-md-4">
                 <label><b>Name:</b></label> <span id="name">

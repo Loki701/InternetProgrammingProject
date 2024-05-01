@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                             <input id="firstName" type="text" name="firstname" placeholder="First Name"
                                 class="form-control bg-white border-left-0 border-md"
-                                value=<?php echo $_POST['firstname'] ?>>
+                                value=<?php echo $_POST['firstname'] ? $_POST['firstname'] : "''" ?>>
                         </div>
 
                         <!-- Last Name -->
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                             <input id="lastName" type="text" name="lastname" placeholder="Last Name"
                                 class="form-control bg-white border-left-0 border-md"
-                                value=<?php echo $_POST['lastname'] ?>>
+                                value=<?php echo $_POST['lastname'] ? $_POST['lastname'] : "''" ?>>
                         </div>
 
                         <!-- Email Address -->
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                             <input id="email" type="email" name="email" placeholder="Email Address"
                                 class="form-control bg-white border-left-0 border-md"
-                                value=<?php echo $_POST['email'] ?>>
+                                value=<?php echo $_POST['email'] ? $_POST['email'] : "''" ?>>
                         </div>
 
 
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                             <input id="password" type="password" name="password" placeholder="Password"
                                 class="form-control bg-white border-left-0 border-md"
-                                value=<?php echo $_POST['password'] ?>>
+                                value=<?php echo $_POST['password'] ? $_POST['password'] : "''" ?>>
                         </div>
 
                         <!-- Password Confirmation -->
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                             <input id="passwordConfirmation" type="password" name="passwordConfirmation"
                                 placeholder="Confirm Password" class="form-control bg-white border-left-0 border-md"
-                                value=<?php echo $_POST['passwordConfirmation'] ?>>
+                                value=<?php echo $_POST['passwordConfirmation'] ? $_POST['passwordConfirmation'] : "''" ?>>
                         </div>
 
                         <p style="color: red;"><?php echo $error_message; ?></p>

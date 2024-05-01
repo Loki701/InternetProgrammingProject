@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body>
     <div id="nav-placeholder"></div>
-    <script type="text/javascript">
+    <script>
         $(function() {
             $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
                 if (statusTxt == "success") {
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     </script>
     <br><br>
 
-    <div id="main-wrapper " class="container bg">
+    <div id="main-wrapper" class="container bg">
         <div class="row justify-content-center w-100">
             <div class="col-xl-10 ">
                 <div class="card border-0">
