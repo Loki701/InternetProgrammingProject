@@ -3,27 +3,23 @@
     src: url('../font/Jersey\ M54.ttf') format('truetype');
 }
 
-.bg-cream {
-    background-color: #EBEDD7;
+body {
+    background-color: rgb(61, 59, 59);
+    color: #f9f5f0;
 }
 
-.rounded-xl {
-    border-radius: 1.5em;
-}
 
-a {
+h1 {
     font-family: 'Jersey', sans-serif;
+    text-align: center;
 }
 
-
-h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
     font-family: 'Jersey', sans-serif;
-    text-align: center;
 }
 
 a {
@@ -33,12 +29,4 @@ a {
 p {
     font-family: 'Times New Roman', Times, serif;
     font-size: 20px;
-}
-
-.rounded-xl {
-    border: 3px solid black;
-}
-
-.rounded-xl:hover {
-    background-color: #EBEDD7;
 }

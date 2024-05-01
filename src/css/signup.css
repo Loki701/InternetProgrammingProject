@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Jersey';
+    src: url('../font/Jersey\ M54.ttf') format('truetype');
+}
+
 .border-md {
     border-width: 2px;
 }
@@ -22,6 +27,19 @@
     background: #1799e4;
 }
 
+a, h1, .btn {
+    font-family: 'Jersey', sans-serif;
+}
+
+p {
+    color: #f9f5f0;
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
 
 /*
@@ -40,14 +58,17 @@
     justify-content: center;
     align-items: center;
 }
-.bg-red{
+
+.bg-red {
     background-color: red;
 }
-.input-c{
+
+.input-c {
     display: flex;
     flex-direction: column;
 }
-.btn{
+
+.btn {
     background-color: #5369f8;
 }
 
@@ -94,5 +115,5 @@ select.form-control {
         width: 100%;
         height: auto;
     }
-    
+
 }

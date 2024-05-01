@@ -48,7 +48,7 @@
     </script>
 </head>
 
-<body class="bg-light">
+<body>
     <div id="nav-placeholder"></div>
     <script type="text/javascript">
         var loggedIn = <?php echo json_encode($loggedIn); ?>;
@@ -76,13 +76,15 @@
 
     <div class="container">
         <div class="row">
-            <div class="col">
-                <h1>Welcome to Gator Ticket Finder</h1>
-                <p>Find tickets to events at the University of Florida</p>
+            <div class="col text-center">
+                <h1 class="welcome-heading">Welcome to Gator Ticket Finder</h1>
+                <div class="subheading-container">
+                    <p>Find tickets to events at the University of Florida</p>
+                </div>
             </div>
         </div>
         <div class="row ml-3">
-            <h2>Upcoming Events:</h2>
+            <h2 class="events-heading">Upcoming Events:</h2>
         </div>
         <div id="events" class="row ml-3 justify-content-center">
             <!-- Events get added here programmatically -->
@@ -96,7 +98,7 @@
                 $dateString = $date->format('F j, Y');
 
                 echo "<a href='event.php?id=" . $event['EventID'] . "' id='event-" . $event['EventID'],
-                    "' class='col-lg-3 card rounded-xl mr-4 mt-4 p-4 bg-cream' style='color: inherit; text-decoration: inherit;'>",
+                    "' class='col-lg-3 card rounded-xl mr-4 mt-4 p-4 bg-light-blue' style='color: inherit; text-decoration: inherit;'>",
                     "<h3 class='text-center' id='name'>" . $event['EventName'] . "</h3>",
                     "<h6 class='text-center' id='date'>" . $dateString . "</h6>",
                     "<h8 class='text-center text-secondary font-weight-light' id='listing_count'>" . $event['ListingCount'] . " Available Listings</h8><br>",
@@ -107,6 +109,7 @@
             ?>
 
         </div>
+
     </div>
 </body>
 

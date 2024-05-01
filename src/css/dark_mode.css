@@ -29,12 +29,12 @@ img {
 }
 
 .bg-light-blue {
-    background-color: white;
+    background-color: #000000;
 }
 
 body {
-    color: black;
-    background-color: white;
+    background-color: black;
+    color: #f9f5f0;
 }
 
 body {
@@ -54,9 +54,5 @@ a {
 
 
 .card {
-    border: 3px solid black;
-}
-
-.card:hover {
-    background-color: #EBEDD7;
+    border: 3px solid white;
 }

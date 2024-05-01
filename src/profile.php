@@ -88,7 +88,7 @@ $user = getUser($connection, $userID);
     }
 
     function newListing(id, game, section, row, seat, price, negotiable) {
-        let listing = `<div id="listing-${id}" class="col-lg-3 rounded-xl mr-4 mt-4 p-4 bg-cream">
+        let listing = `<div id="listing-${id}" class="col-lg-3 rounded-xl mr-4 mt-4 p-4">
                                 <h3 id="game">${game}</h3><br>
                                 <b>Section: </b><span id="section">${section}</span><br>
                                 <b>Row: </b><span id="row">${row}</span><br>
@@ -129,7 +129,7 @@ $user = getUser($connection, $userID);
         });
     </script>
     <div id="main" class="container">
-        <div class="row ml-3">
+        <div>
             <h2>Profile</h2>
         </div>
         <div class="row align-items-center ml-3">

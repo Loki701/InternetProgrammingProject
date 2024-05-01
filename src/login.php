@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="mb-5">
-                                        <h3 class="h4 font-weight-bold text-theme">Login</h3>
+                                        <h3 class="h3 text-theme">Login</h3>
                                     </div>
 
                                     <h6 class="h5 mb-0">Welcome back!</h6>
@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                 <div class="account-block rounded-right">
                                     <div class="overlay rounded-right"></div>
                                     <div class="account-testimonial">
-                                        <h4 class="text-white mb-4">Saved so much money!</h4>
+                                        <h4 class="text-white mb-4">So much better!</h4>
                                         <p class="lead text-white">"Best account I have made for a long time. Can only
                                             recommend it for other students."</p>
                                         <p>- Jose Figueredo</p>
