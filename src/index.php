@@ -53,7 +53,7 @@
     <script type="text/javascript">
         var loggedIn = <?php echo json_encode($loggedIn); ?>;
         $(function() {
-            $("#nav-placeholder").load("nav_index.html #navbar", function(responseTxt, statusTxt, xhr) {
+            $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
                 if (statusTxt == "success") {
                     $("#nav-home").addClass("active");
                     if(loggedIn) {
