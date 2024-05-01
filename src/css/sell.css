@@ -57,7 +57,7 @@ body {
     display: none;
 }
 
-a {
+a, h2, .dropdown-menu, .btn {
     font-family: 'Jersey', sans-serif;
 }
 

@@ -97,9 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <img src="https://bootstrapious.com/i/snippets/sn-registeration/illustration.svg" alt=""
                     class="img-fluid mb-3 d-none d-md-block">
                 <h1>Create an Account</h1>
-                <p class="font-italic text-muted mb-0">Take advantage of all we have to offer by just
-                    creating an
-                    account.</p>
+                <p class="font-italic text-muted mb-0">Sign up now to start buying and selling tickets!</p>
             </div>
 
             <!-- Registeration Form -->

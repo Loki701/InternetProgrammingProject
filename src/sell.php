@@ -89,7 +89,7 @@
                         <div class="row no-gutters">
                             <div class="col-lg-6">
                                 <div class="p-5">
-                                    <h3 class="h4 font-weight-bold text-theme mb-5">List Ticket</h3>
+                                    <h2 class="h2 text-theme mb-5">List Ticket</h2>
                                     <p class="text-muted mt-2 mb-5">Enter details about your ticket below to list your ticket.</p>
 
                                     <form action="sell.php" method="post">

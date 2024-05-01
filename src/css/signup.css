@@ -27,7 +27,7 @@
     background: #1799e4;
 }
 
-a {
+a, h1, .btn {
     font-family: 'Jersey', sans-serif;
 }
 

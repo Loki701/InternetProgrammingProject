@@ -64,7 +64,7 @@ body {
     color: #fff;
 }
 
-a {
+a, h3, .btn {
     font-family: 'Jersey', sans-serif;
 }
 
