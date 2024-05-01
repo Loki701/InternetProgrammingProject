@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                 <div class="account-block rounded-right">
                                     <div class="overlay rounded-right"></div>
                                     <div class="account-testimonial">
-                                        <h4 class="text-white mb-4">So much better!</h4>
+                                        <h4 class="text-white mb-4">Such a time save!</h4>
                                         <p class="lead text-white">"Best account I have made for a long time. Can only
                                             recommend it for other students."</p>
                                         <p>- Jose Figueredo</p>

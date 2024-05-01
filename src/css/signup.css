@@ -35,6 +35,10 @@ p {
     color: #f9f5f0;
 }
 
+.lbl {
+    color: darkgray;
+}
+
 html,
 body {
     max-width: 100%;

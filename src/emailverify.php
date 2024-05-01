@@ -83,10 +83,10 @@ if ($_GET['uid'] && $_GET['fn'] && $_GET['ln'] && $_GET['hp'] && $_GET['hash']) 
                         <br>
                         <h5 <?php echo $verified? "hidden" : "" ?>><br>Check your email for a verification link!<br></h5>
                         <br>
-                        <p <?php echo $verified? "hidden" : "" ?>>If you didn't receive the link, or input an incorrect email, you will need to 
+                        <p class="lbl" <?php echo $verified? "hidden" : "" ?>>If you didn't receive the link, or input an incorrect email, you will need to 
                         <a href="signup.php"><b>Register</b></a>
                         again</p>
-                        <p <?php echo $verified? "" : "hidden" ?>>Your account has been created. You can now 
+                        <p class="lbl" <?php echo $verified? "" : "hidden" ?>>Your account has been created. You can now 
                         <a href="login.php"><b>Log in</b></a></p>
 
                         <p style="color: red;"><?php echo $error_message; ?></p>
