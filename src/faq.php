@@ -24,7 +24,7 @@ $loggedIn = check_login();
 
 <body>
     <div id="nav-placeholder"></div>
-    <script type="text/javascript">
+    <script>
         var loggedIn = <?php echo json_encode($loggedIn); ?>;
         $(function () {
             $("#nav-placeholder").load("nav_index.html #navbar", function (responseTxt, statusTxt, xhr) {

@@ -51,15 +51,15 @@
             $("#game-image").css("background-image", `url(./../img/logos/${firstImage})`);
             $(`#average-${firstEventID}`).css("display", "inline");
 
-            $('a[name=games]').click(function() {
-                const id = $(this).attr('value');
+            $('a[id*=game]').click(function() {
+                const id = $(this).attr('name');
                 $("#dropdownMenuButton").html($(this).html());
                 $("#game").val(id);
-                var imagePath = $(`#eventid-${id}`).attr('value');
+                var imagePath = $(`#eventid-${id}`).text();
                 console.log(imagePath);
                 $("#game-image").css("background-image", `url(./../img/logos/${imagePath})`);
 
-                $("small[name='averages']").css("display", "none");
+                $("small[id*='average']").css("display", "none");
                 $(`#average-${id}`).css("display", "inline");
             });
         });
@@ -70,7 +70,7 @@
 <body>
     <!-- Navbar -->
     <div id="nav-placeholder"></div>
-    <script type="text/javascript">
+    <script>
         $(function() {
             $("#nav-placeholder").load("nav.html #navbar", function(responseTxt, statusTxt, xhr) {
                 if (statusTxt == "success") {
@@ -96,7 +96,7 @@
                                         <input type="hidden" name="action" value="addListing">
 
                                         <div class="form-group row">
-                                            <label for="dro" class="col-sm-3 col-form-label">Game</label>
+                                            <label class="col-sm-3 col-form-label">Game</label>
                                             <div class="col-sm-7 offset-sm-1">
                                                 <div id="dropdown" class="dropdown">
                                                     <button class="btn btn-theme dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -106,13 +106,13 @@
                                                         <?php
                                                         $result = getAllEvents($connection);
                                                         while ($row = mysqli_fetch_assoc($result)) {
-                                                            echo "<a class='dropdown-item' href='javascript:void(0);' name='games' value=" . $row['EventID'] . ">" . $row['EventName'] . "</a>";
-                                                            echo "<span class='hidden-span' id='eventid-" . $row['EventID'] . "' value='" . $row['EventImageFile'] . "'></span>"; //hacky way of storing data :sob:
+                                                            echo "<a id='game-" . $row['EventID'] . "' class='dropdown-item' href='javascript:void(0);' name=" . $row['EventID'] . ">" . $row['EventName'] . "</a>";
+                                                            echo "<span class='hidden-span' id='eventid-" . $row['EventID'] . "'>" . $row['EventImageFile'] . "</span>"; //hacky way of storing data :sob:
                                                         }
                                                         ?>
                                                     </div>
                                                     <?php
-                                                    echo ('<input type="hidden" id="game" name="game" required value="' . $firstEventID . '">')
+                                                    echo ('<input type="hidden" id="game" name="game" value="' . $firstEventID . '">')
                                                     ?>
                                                 </div>
                                             </div>
@@ -144,7 +144,7 @@
                                                 <?php
                                                 $result = getEventsAveragePrices($connection);
                                                 while ($row = mysqli_fetch_assoc($result)) {
-                                                    echo "<small class='text-muted' name='averages' id='average-" . $row["EventID"] . "' style='display: none;'>Average listing price: $" . number_format($row["AveragePrice"], 2) . "</small>";
+                                                    echo "<small class='text-muted' id='average-" . $row["EventID"] . "' style='display: none;'>Average listing price: $" . number_format($row["AveragePrice"], 2) . "</small>";
                                                 }
                                                 ?>
                                             </div>
